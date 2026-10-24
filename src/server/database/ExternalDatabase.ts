@@ -118,15 +118,17 @@ const reportStatus = (status: number, what: string, body?: string): string => {
 type StudioConfig = {
 	readonly writetoken?: string;
 	readonly baseurl?: string;
+	readonly privateexportkey?: string;
 };
 
 const PRODUCTION_URL = "https://www.ftrookie.com/overengineered";
 
 let studioConfig: StudioConfig | undefined;
-const getStudioConfig = (): StudioConfig => {
+export const getStudioConfig = (): StudioConfig => {
 	if (studioConfig !== undefined) return studioConfig;
 
 	const module = ServerScriptService.FindFirstChild("studioconfig") as ModuleScript | undefined;
+	if (module && !module.IsA("Folder")) $warn("studioconfig is not a folder");
 	return (studioConfig = module ? (require(module) as StudioConfig) : {});
 };
 

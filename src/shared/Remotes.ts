@@ -130,6 +130,44 @@ declare global {
 	type PlayerLoadSlotRequest = {
 		readonly index: number;
 	};
+	type PlayerExportSlotRequest = {
+		readonly mode: "reference" | "static";
+
+		readonly creatorId: string;
+		readonly slotIndex: number | "current";
+
+		readonly whitelist: string[];
+		readonly blacklist: string[];
+		readonly isPublic: boolean;
+		readonly expiration: "5m" | "1h" | "1d" | "7d" | "30d" | "forever";
+	};
+	type PlayerImportSlotRequest = {
+		readonly payloadString: string;
+	};
+	type PlayerImportSlotValidateRequest = {
+		readonly payloadString: string;
+	};
+	type PlayerImportSlotValidateResponse = Response<{
+		readonly reqId: string;
+		readonly issues: {
+			readonly invalidBlocks: Record<string, number>;
+			readonly wouldOverwrite: boolean;
+		};
+	}>;
+	type PlayerImportSlotExecuteRequest = {
+		readonly reqId: string;
+		readonly options: {
+			readonly confirmOverwrite: boolean;
+			readonly skipInvalidBlocks: boolean;
+		};
+	};
+	type WarnErrorResponse = ErrorResponse & { readonly errorLevel?: "warn" }; // Allows it to return `success: false`, without causing an error (e.g., if the user cancelled)
+	type PlayerImportSlotExecuteResponse =
+		| WarnErrorResponse
+		| SuccessResponse<{
+				readonly configs: { readonly [k: string]: PlacedBlockConfig };
+				readonly wasShifted: boolean;
+		  }>;
 	type PlayerLoadSlotFromHistoryRequest = {
 		readonly databaseId: string;
 		readonly historyId: string;
@@ -167,6 +205,12 @@ export type ServerRosterEntry = {
 export const CustomRemotes = {
 	initPlayer: new C2S2CRemoteFunction<undefined, Response<PlayerInitResponse>>("player_init"),
 	playerLoaded: new C2SRemoteEvent("player_loaded"),
+	importSlotValidate: new C2S2CRemoteFunction<PlayerImportSlotValidateRequest, PlayerImportSlotValidateResponse>(
+		"player_importSlotValidate",
+	),
+	importSlotExecute: new C2S2CRemoteFunction<PlayerImportSlotExecuteRequest, PlayerImportSlotExecuteResponse>(
+		"player_importSlotExecute",
+	),
 
 	tutorial: {
 		finished: new C2SRemoteEvent("tutorial_finished"),

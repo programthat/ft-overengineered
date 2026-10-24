@@ -27,6 +27,7 @@ type PD = NonNullableFields<PlayerDataResponse> & {
 
 @injectable
 export class PlayerDataStorage {
+	// Used for opening slots as another player in admin UI
 	static forPlayer(playerId: number) {
 		const result = CustomRemotes.admin.adminDataFor.send(playerId);
 		if (!result.success) {
@@ -35,7 +36,9 @@ export class PlayerDataStorage {
 
 		const playerRemotes = PlayerDataRemotes.createPlayer(result.remotes);
 		const slotRemotes = PlayerDataRemotes.createSlots(result.remotes);
-		return new PlayerDataStorage(PlayerDataStorage.convertData(result.data), playerRemotes, slotRemotes);
+		const pds = new PlayerDataStorage(PlayerDataStorage.convertData(result.data), playerRemotes, slotRemotes);
+		pds.foreignPlayerId = playerId;
+		return pds;
 	}
 
 	static convertData(data: PlayerDataResponse): PD {
@@ -63,6 +66,9 @@ export class PlayerDataStorage {
 	readonly achievements;
 
 	readonly loadedSlot = new ObservableValue<number | undefined>(undefined);
+
+	/** set when an admin opened someone else's slots */
+	foreignPlayerId?: number;
 
 	constructor(
 		data: PD,
@@ -113,11 +119,14 @@ export class PlayerDataStorage {
 		$log("Setting slot " + req.index + " to " + HttpService.JSONEncode(req));
 		this.loadedSlot.set(req.index);
 
-		let d = this.data.get();
-		if (d) {
+		let slotData = this.data.get();
+		if (slotData) {
 			this._data.set({
-				...d,
-				slots: SlotsMeta.withSlot(d.slots, req.index, { ...req, saveTime: DateTime.now().UnixTimestampMillis }),
+				...slotData,
+				slots: SlotsMeta.withSlot(slotData.slots, req.index, {
+					...req,
+					saveTime: DateTime.now().UnixTimestampMillis,
+				}),
 			});
 		}
 
@@ -127,12 +136,12 @@ export class PlayerDataStorage {
 			return response;
 		}
 
-		d = this.data.get();
-		if (d) {
+		slotData = this.data.get();
+		if (slotData) {
 			this._data.set({
 				...this.data.get()!,
-				slots: SlotsMeta.withSlot(d.slots, req.index, {
-					blocks: response.blocks ?? SlotsMeta.get(d.slots, req.index).blocks,
+				slots: SlotsMeta.withSlot(slotData.slots, req.index, {
+					blocks: response.blocks ?? SlotsMeta.get(slotData.slots, req.index).blocks,
 				}),
 			});
 		}
@@ -149,6 +158,17 @@ export class PlayerDataStorage {
 		const response = this.slotRemotes.delete.send(req);
 		if (!response.success) {
 			$err(response.message);
+			return response;
+		}
+
+		return response;
+	}
+	exportPlayerSlot(req: PlayerExportSlotRequest) {
+		$log("Exporting slot " + req.slotIndex);
+
+		const response = this.slotRemotes.exportSlot.send(req);
+		if (!response.success) {
+			warn("ERR:", response.message);
 			return response;
 		}
 

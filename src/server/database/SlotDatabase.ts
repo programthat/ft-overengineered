@@ -15,6 +15,13 @@ import type { LatestSerializedBlocks } from "shared/building/BlocksSerializer";
 export type SlotWriteResult =
 	{ readonly ok: true; readonly durable: "external" | "datastore" } | { readonly ok: false; readonly error: string };
 
+/** If a slot is actually available externally, not just in the datastore */
+export type ExportError = "NotExportable" | "StillSyncing" | "Unreachable" | "Empty" | "NoVersion" | "NotSynced";
+export type ExportRead =
+	| { readonly ok: true; readonly value: LatestSerializedBlocks }
+	| { readonly ok: false; readonly error: "LocalOnly"; readonly value: LatestSerializedBlocks }
+	| { readonly ok: false; readonly error: ExportError };
+
 /**
  * Within-session scratch, rewritten on EVERY ride start and never read again — HTTP would burn the quota.
  * The quit slot is deliberately NOT here: the datastore dies with the experience, so the last thing we know
@@ -59,9 +66,7 @@ export class SlotDatabase {
 			const prefix = tostring(plr.UserId) + "_";
 
 			for (const [key, { keys }] of this.blocksdb.loadedUnsavedEntries()) {
-				if (!key.startsWith(prefix)) {
-					continue;
-				}
+				if (!key.startsWith(prefix)) continue;
 
 				$log("Saving " + key);
 				// only drop it from the cache if the backend actually took it
@@ -117,13 +122,8 @@ export class SlotDatabase {
 
 		const maxSlots = GameDefinitions.getMaxSlots(player, pdata.purchasedSlots ?? 0);
 
-		if (index >= 0 && index < maxSlots) {
-			return;
-		}
-
-		if (SlotsMeta.isTestSlot(index)) {
-			return;
-		}
+		if (index >= 0 && index < maxSlots) return;
+		if (SlotsMeta.isTestSlot(index)) return;
 
 		throw "Invalid slot index " + index;
 	}
@@ -202,6 +202,51 @@ export class SlotDatabase {
 			this.syncToExternal(userId, index, stored);
 			return { ok: true, value: stored };
 		}
+
+		return { ok: true, value: external.value };
+	}
+
+	/**
+	 * The slot exactly as the external db holds it, or why it can't be used yet.
+	 * Necessary for the export save system as reference mode depends on the external db.
+	 */
+	exportableBlocks(userId: number, index: number, ignoreGlobalDB: boolean = false): ExportRead {
+		this.ensureValidSlotIndex(userId, index);
+
+		// Static mode: newest copy from either store, the db doesn't need to have it
+		if (ignoreGlobalDB) {
+			const resolved = this.resolveBlocks(userId, index);
+			print("{RESOLVED}:", resolved);
+			if (!resolved.ok) return { ok: false, error: "Unreachable" };
+			if (resolved.value === undefined || resolved.value.blocks.size() === 0)
+				return { ok: false, error: "Empty" };
+			return { ok: true, value: resolved.value };
+		}
+
+		if (datastoreOnlySlots.has(index)) return { ok: false, error: "NotExportable" };
+		if (this.pendingSync.has(`${userId}_${index}`)) return { ok: false, error: "StillSyncing" };
+
+		const external = ExternalDatabase.GetSave([userId, index]);
+		print("{EXTERNAL}:", external);
+		if (!external.ok) return { ok: false, error: "Unreachable" };
+
+		const stored = this.blocksdb.get([userId, index]);
+		const hasStored = stored.blocks.size() > 0 || stored.savedAt !== undefined;
+
+		// nothing upstairs, only a local copy
+		if (external.value === undefined) {
+			if (hasStored && stored.blocks.size() > 0) return { ok: false, error: "LocalOnly", value: stored };
+			return { ok: false, error: "Empty" };
+		}
+
+		// both exist, local copy is newer
+		if (hasStored && (stored.savedAt ?? 0) >= (external.value.savedAt ?? 0)) {
+			if (stored.blocks.size() === 0) return { ok: false, error: "Empty" }; // local tombstone
+			return { ok: false, error: "NotSynced" };
+		}
+
+		if (external.value.blocks.size() === 0) return { ok: false, error: "Empty" };
+		if (external.value.version === undefined) return { ok: false, error: "NoVersion" };
 
 		return { ok: true, value: external.value };
 	}

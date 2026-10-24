@@ -37,7 +37,7 @@ const serialize = (data: unknown): string => {
 	return Base64.Encode(str);
 };
 
-type ReportSubmitPopupDefinition = GuiObject & {
+export type ReportSubmitPopupDefinition = GuiObject & {
 	readonly Content: Frame & {
 		readonly Text: TextLabel;
 		readonly TextBox: TextBox;
@@ -46,6 +46,7 @@ type ReportSubmitPopupDefinition = GuiObject & {
 		};
 	};
 	readonly Heading: {
+		readonly TitleLabel: TextLabel;
 		readonly CloseButton: ButtonDefinition;
 	};
 };

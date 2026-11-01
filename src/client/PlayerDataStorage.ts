@@ -88,9 +88,15 @@ export class PlayerDataStorage {
 			);
 
 		CustomRemotes.updateSaves.invoked.Connect((slots) => this._data.set({ ...this._data.get(), slots }));
+		CustomRemotes.updateBlockLimits.invoked.Connect((blocks) => this._data.set({ ...this._data.get(), blocks }));
 		CustomRemotes.achievements.update.invoked.Connect((data) => {
 			this._data.set({ ...this._data.get(), achievements: { ...this._data.get().achievements, ...data } });
 		});
+	}
+
+	/** Replaces everything with a row that failed to load at join and has since come back */
+	applyRecovered(data: PlayerDataResponse) {
+		this._data.set(PlayerDataStorage.convertData(data));
 	}
 
 	async sendPlayerConfig(config: PartialThrough<PlayerConfig>) {

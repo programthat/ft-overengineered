@@ -4,11 +4,15 @@ import { t } from "engine/shared/t";
 import { ServerBlockLogic } from "server/blocks/ServerBlockLogic";
 import { ServerPartUtils } from "server/plots/ServerPartUtils";
 import { BlockConfig } from "shared/blockLogic/BlockConfig";
+import { ExtinguisherBombBlock, popExtinguisherCap } from "shared/blocks/blocks/ExtinguisherBombBlock";
 import { BlockManager } from "shared/building/BlockManager";
 import { RemoteEvents } from "shared/RemoteEvents";
 import { CustomRemotes } from "shared/Remotes";
 import { PartUtils } from "shared/utils/PartUtils";
-import { applyModifiers } from "shared/weaponProjectiles/BaseProjectileLogic";
+import { applyModifiers, MAX_PROJECTILE_SPEED } from "shared/weaponProjectiles/BaseProjectileLogic";
+import { BulletProjectileSpawner } from "shared/weaponProjectiles/BulletProjectileLogic";
+import { LaserProjectileSpawner } from "shared/weaponProjectiles/LaserProjectileLogic";
+import { PlasmaProjectileSpawner } from "shared/weaponProjectiles/PlasmaProjectileLogic";
 import { ShellProjectileSpawner } from "shared/weaponProjectiles/ShellProjectileLogic";
 import type { PlayModeController } from "server/modes/PlayModeController";
 import type { ServerBlockDamageController } from "server/ServerBlockDamageController";
@@ -16,7 +20,7 @@ import type { ServerPlayersController } from "server/ServerPlayersController";
 import type { SpreadingFireController } from "server/SpreadingFireController";
 import type { ExplosionEffect } from "shared/effects/ExplosionEffect";
 import type { ImpactSoundEffect } from "shared/effects/ImpactSoundEffect";
-import type { ExplodeArgs, ExplodeAtArgs } from "shared/RemoteEvents";
+import type { ExplodeArgs, ExplodeAtArgs, ExtinguishArgs } from "shared/RemoteEvents";
 
 const FLAMMABLE_EXPLOSION_HEAT = 6.0;
 /** set on a detonated TNT so it can't fire twice; cleared free by ride->build regen */
@@ -28,8 +32,8 @@ const SHELL_LIFETIME = 15;
 const SHOT_DISTANCE_TOLERANCE = 2;
 /** bounds the ledger for a player firing far faster than they detonate */
 const MAX_TRACKED_SHOTS = 64;
-/** mirrors ShellProjectileLogic's fallback, for a breech that declares no blast */
-const FALLBACK_SHELL_BLAST = { radius: 8, pressure: 1200 } as const;
+/** fraction of a block's reload a shell from the same muzzle must wait, the rest absorbing sends bunched by lag */
+const RELOAD_SLACK = 0.5;
 
 /** block-scale jitter, before anything is scaled by the sender's speed */
 const POSITION_BASE_TOLERANCE = 4;
@@ -63,6 +67,14 @@ const explodeType = t.strictInterface({
 	at: t.number,
 });
 const explodeAtType = t.strictInterface({ position: t.vector3 });
+const burnType = t.array(t.instance("BasePart"));
+const extinguishType = t.strictInterface({ part: t.instance("BasePart"), radius: t.number });
+const weaponOriginType = t.interface({ originPart: t.instance("BasePart") });
+const laserBeamType = t.interface({ originPart: t.instance("BasePart"), firing: t.boolean });
+
+const MAX_EXTINGUISH_RADIUS = ExtinguisherBombBlock.logic.definition.input.radius.types.number.clamp.max;
+
+type ShellSpawnArgs = Parameters<ShellProjectileSpawner["justRun"]>[0];
 
 @injectable
 export class UnreliableRemoteController extends HostedService {
@@ -79,6 +91,9 @@ export class UnreliableRemoteController extends HostedService {
 
 		const serverBreakQueue: Set<BasePart> = new Set();
 
+		const isOwnPart = (part: BasePart, player: Player) =>
+			BlockManager.tryGetBlockModelByPart(part)?.Parent?.Parent?.GetAttribute("ownerid") === player.UserId;
+
 		const impactBreakEvent = (player: Player | undefined, parts: BasePart[]) => {
 			if (!player) {
 				for (const part of parts) {
@@ -88,11 +103,7 @@ export class UnreliableRemoteController extends HostedService {
 			}
 
 			task.spawn(() => {
-				const owned = parts.filter((part) => {
-					if (!BlockManager.isActiveBlockPart(part)) return false;
-					const model = BlockManager.tryGetBlockModelByPart(part);
-					return model?.Parent?.Parent?.GetAttribute("ownerid") === player.UserId;
-				});
+				const owned = parts.filter((part) => BlockManager.isActiveBlockPart(part) && isOwnPart(part, player));
 				if (owned.isEmpty()) return;
 
 				const players = this.playersController.getPlayers().filter((p) => p !== player);
@@ -136,12 +147,14 @@ export class UnreliableRemoteController extends HostedService {
 			});
 		});
 
-		const burnEvent = (parts: BasePart[]) => {
-			parts.forEach((part) => {
-				if (!BlockManager.isActiveBlockPart(part)) return;
+		const burnEvent = (player: Player | undefined, parts: readonly BasePart[]) => {
+			for (const part of parts) {
+				if (!BlockManager.isActiveBlockPart(part)) continue;
+				// ignore if a player sent someone else's part: lava reports whatever touched it
+				if (player && !isOwnPart(part, player)) continue;
 
 				spreadingFire.burn(part);
-			});
+			}
 		};
 
 		// one explosion = radial HP damage (server-authoritative) + fire spread + the effect; the push is the clients' job
@@ -164,7 +177,7 @@ export class UnreliableRemoteController extends HostedService {
 				radius,
 				pressure,
 				isFlammable ? FLAMMABLE_EXPLOSION_HEAT : 0,
-				attacker,
+				attacker?.UserId,
 				undefined,
 				claimed,
 				selfOnly,
@@ -174,7 +187,9 @@ export class UnreliableRemoteController extends HostedService {
 			// their own before sending, so they are left out. an untrusted blast reaches no other client at all
 			if (!selfOnly) {
 				const others = attacker
-					? this.playersController.getPlayers().except([attacker])
+					? this.playersController
+							.getPlayers()
+							.filter((p) => p !== attacker && blockDamageController.mayHarm(attacker.UserId, p.UserId))
 					: this.playersController.getPlayers();
 				CustomRemotes.physics.blast.send(others, { epicenter, radius, pressure });
 			}
@@ -227,6 +242,7 @@ export class UnreliableRemoteController extends HostedService {
 			readonly firedAt: number;
 		};
 		const shots = new Map<Player, Shot[]>();
+		const lastShellAt = new Map<BasePart, number>();
 
 		const takeShotFor = (player: Player, position: Vector3): Shot | undefined => {
 			const owned = shots.get(player);
@@ -392,29 +408,82 @@ export class UnreliableRemoteController extends HostedService {
 			);
 		};
 
+		// every client simulates a relayed shot as fired by the origin's owner, and that owner's client applies its
+		// blast and damage, so only a shot from the sender's own build while riding is relayed
+		const isOwnRidingShot = (player: Player, arg: unknown): arg is { readonly originPart: BasePart } =>
+			t.typeCheck(arg, weaponOriginType) &&
+			playModeController.getPlayerMode(player) === "ride" &&
+			isOwnPart(arg.originPart, player);
+
+		BulletProjectileSpawner.instance?.addRelayCheck(isOwnRidingShot);
+		PlasmaProjectileSpawner.instance?.addRelayCheck(isOwnRidingShot);
+		LaserProjectileSpawner.instance?.addRelayCheck((player, arg) => {
+			if (!t.typeCheck(arg, laserBeamType)) return false;
+			// ignore the mode for a teardown: it can only remove the sender's own beam
+			if (!arg.firing) return isOwnPart(arg.originPart, player);
+
+			return isOwnRidingShot(player, arg);
+		});
+
 		// records what it relays. speed mirrors BaseProjectileLogic: baseVelocity is the unit direction, so the
 		// fired speed is applyModifiers(1, …, "speedModifier") — derived here rather than trusted
-		const spawner = ShellProjectileSpawner.instance;
-		if (spawner) {
-			this.event.subscribe(spawner.event.c2s.invoked, (player, { originPart, modifiers, blast }) => {
-				if (!originPart) return;
+		ShellProjectileSpawner.instance?.addRelayCheck((player, arg) => {
+			if (!isOwnRidingShot(player, arg)) return false;
+			const { originPart, modifiers } = arg as ShellSpawnArgs;
+			if (!ServerBlockLogic.staticIsValidBlock(originPart, player, playModeController)) return false;
 
-				const owned = shots.getOrSet(player, () => []);
-				if (owned.size() >= MAX_TRACKED_SHOTS) owned.remove(0);
+			// the client names the muzzle, never its calibre
+			const model = BlockManager.tryGetBlockModelByPart(originPart);
+			if (!model || originPart.Parent?.Name !== "moduleMarkers" || originPart.Parent.Parent !== model) {
+				return false;
+			}
+			const weaponConfig = this.blockList.blocks[BlockManager.manager.id.get(model)]?.weaponConfig;
+			if (!weaponConfig?.blast) return false;
+			if (weaponConfig.markers[originPart.Name]?.emitsProjectiles !== true) return false;
 
-				owned.push({
-					origin: originPart.Position,
-					speed: applyModifiers(1, modifiers, "speedModifier"),
-					radius: blast?.radius ?? FALLBACK_SHELL_BLAST.radius,
-					pressure: blast?.pressure ?? FALLBACK_SHELL_BLAST.pressure,
-					firedAt: os.clock(),
-				});
-			});
-		}
+			// NaN or inf would pass the distance check in takeShotFor, which compares against it
+			const rawSpeed = applyModifiers(1, modifiers, "speedModifier");
+			if (!(rawSpeed > 0 && rawSpeed < math.huge)) return false;
+			const speed = math.min(rawSpeed, MAX_PROJECTILE_SPEED);
+
+			const now = os.clock();
+			const { fireRate } = weaponConfig;
+			const minGap = fireRate !== undefined && fireRate > 0 ? RELOAD_SLACK / fireRate : 0;
+			const last = lastShellAt.get(originPart);
+			if (last !== undefined && now - last < minGap) return false;
+			if (last === undefined) originPart.Destroying.Once(() => lastShellAt.delete(originPart));
+			lastShellAt.set(originPart, now);
+
+			const { radius, pressure } = weaponConfig.blast;
+
+			const owned = shots.getOrSet(player, () => []);
+			if (owned.size() >= MAX_TRACKED_SHOTS) owned.remove(0);
+
+			owned.push({ origin: originPart.Position, speed, radius, pressure, firedAt: now });
+			return true;
+		});
 		this.event.subscribe(Players.PlayerRemoving, (player) => shots.delete(player));
 
+		const extinguish = (player: Player | undefined, { part, radius }: ExtinguishArgs) => {
+			if (!ServerBlockLogic.staticIsValidBlock(part, player, playModeController)) return;
+
+			// staticIsValidBlock proves ownership, not identity, so without this any owned block extinguishes
+			const model = BlockManager.tryGetBlockModelByPart(part);
+			if (!model || BlockManager.manager.id.get(model) !== ExtinguisherBombBlock.id) return;
+			// NaN fails self-compare and slips past math.clamp
+			if (radius !== radius) return;
+
+			const clamped = math.clamp(radius, 0, MAX_EXTINGUISH_RADIUS);
+			if (!popExtinguisherCap(model, part, clamped)) return;
+
+			spreadingFire.extinguishCloud(player, part.Position, clamped);
+		};
+
 		this.event.subscribe(RemoteEvents.ImpactBreak.invoked, impactBreakEvent);
-		this.event.subscribe(RemoteEvents.Burn.invoked, (_, parts) => burnEvent(parts));
+		this.event.subscribe(RemoteEvents.Burn.invoked, (player, arg) => {
+			if (!checked(player, arg, burnType, "burn")) return;
+			burnEvent(player, arg);
+		});
 		this.event.subscribe(RemoteEvents.Explode.invoked, (player, arg) => {
 			if (!checked(player, arg, explodeType, "explode")) return;
 			explode(player, arg);
@@ -422,6 +491,10 @@ export class UnreliableRemoteController extends HostedService {
 		this.event.subscribe(RemoteEvents.ExplodeAt.invoked, (player, arg) => {
 			if (!checked(player, arg, explodeAtType, "explode_at")) return;
 			explodeAt(player, arg);
+		});
+		this.event.subscribe(RemoteEvents.Extinguish.invoked, (player, arg) => {
+			if (!checked(player, arg, extinguishType, "extinguish")) return;
+			extinguish(player, arg);
 		});
 	}
 }

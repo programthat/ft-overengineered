@@ -24,6 +24,30 @@ const logs: PreProcess[] = [
 	// },
 
 	{
+		Header: "I Can Fix You",
+		Date: "2026-10-28",
+		Content: `
+			- Fix sprint speed and jump power resetting after respawn
+			- Fix build mode sometimes not coming back after respawn
+			- Fix sometimes spawning at the map spawn instead of your plot
+			- If your saves fail to load, the game keeps retrying and brings them back, no rejoin needed
+			- Propellant now launches cargo off anchored builds
+			- Extinguisher Bomb radius above 20 now actually works
+			- Blacklist and the hide-others' speakers/lasers/tracers/TTS/particles settings now also apply right after joining
+			- Fix Screen not updating for other players when it shows a sound with effects
+			- Gyroscope in Follow Cursor mode now aims past your own build and projectiles instead of spinning at them
+			- PvP can now only be set in Build mode
+			- Fire from other players no longer spreads to you or your build unless you both have PvP on
+			- Explosions from other players no longer push your build unless you both have PvP on
+			- ALL Projectiles now limited to 3000 studs/s
+			- Granted blocks (like the Lua Circuit) now apply right away, even while you are playing
+			- Fix terrain behind you not unloading when turning in place
+			- Fix terrain sometimes stopping loading altogether
+			- Fixed several exploits
+			- Controller R3 No longer changes input to desktop
+		`,
+	},
+	{
 		Header: "Tactile",
 		Date: "2026-09-23",
 		Content: `

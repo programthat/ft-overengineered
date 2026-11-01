@@ -19,7 +19,6 @@ import { MortalityController } from "server/MortalityController";
 import { UnreliableRemoteController } from "server/network/event/UnreliableRemoteHandler";
 import { ServerPlots } from "server/plots/ServerPlots";
 import { RagdollController } from "server/RagdollController";
-import { RemoteKickController } from "server/RemoteKickController";
 import { ServerBlockDamageController } from "server/ServerBlockDamageController";
 import { ServerEffectCreator } from "server/ServerEffectCreator";
 import { ServerPlayersController } from "server/ServerPlayersController";
@@ -117,7 +116,6 @@ export namespace SandboxGame {
 		builder.services.registerService(AchievementController);
 		builder.services.registerService(AnnouncementController);
 		builder.services.registerService(CommandController);
-		builder.services.registerService(RemoteKickController);
 		builder.services.registerService(BadgeController);
 	}
 }

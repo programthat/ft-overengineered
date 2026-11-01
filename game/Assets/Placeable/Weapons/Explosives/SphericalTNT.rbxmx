@@ -30,6 +30,8 @@
       <Ref name="PrimaryPart">1</Ref>
       <bool name="DefinesCapabilities">false</bool>
       <float name="ScaleFactor">1</float>
+      <BinaryString name="SerializedOverrides">
+      </BinaryString>
       <SharedString name="SlimHash">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
       <int64 name="SourceAssetId">-1</int64>
       <BinaryString name="Tags"></BinaryString>
@@ -41,9 +43,6 @@
         <string name="Name">Part</string>
         <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
         <bool name="Anchored">true</bool>
-        <ContentId name="AssetId">
-          <url>https://www.roblox.com//asset/?id=94970919900821</url>
-        </ContentId>
         <BinaryString name="AttributesSerialize"></BinaryString>
         <bool name="AudioCanCollide">true</bool>
         <float name="BackParamA">-0.5</float>
@@ -80,6 +79,9 @@
         <int name="CollisionGroupId">2</int>
         <Color3uint8 name="Color3uint8">16316664</Color3uint8>
         <int name="ComponentIndex">-1</int>
+        <Content name="Content">
+          <uri>https://www.roblox.com//asset/?id=94970919900821</uri>
+        </Content>
         <PhysicalProperties name="CustomPhysicalProperties">
           <CustomPhysics>false</CustomPhysics>
         </PhysicalProperties>
@@ -138,6 +140,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <Vector3 name="size">
           <X>2</X>
           <Y>2</Y>
@@ -206,12 +210,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -264,12 +271,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -322,12 +332,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -380,12 +393,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -438,12 +454,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -496,12 +515,15 @@
             <null>
             </null>
           </Content>
+          <token name="ResampleMode">0</token>
           <float name="Rotation">0</float>
           <Content name="RoughnessMapContent">
             <null>
             </null>
           </Content>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
           <Content name="TextureContent">
@@ -536,6 +558,8 @@
           <B>0</B>
         </Color3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <int64 name="SourceAssetId">-1</int64>
         <BinaryString name="Tags"></BinaryString>
       </Properties>

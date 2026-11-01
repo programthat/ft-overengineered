@@ -7,6 +7,9 @@ import { ProjectileHitboxes } from "shared/weaponProjectiles/ProjectileHitboxes"
 import type { PlayerDataStorage } from "client/PlayerDataStorage";
 import type { BlockDamage } from "engine/shared/BlockDamageController";
 
+/** Muzzle speed cap for every projectile, studs/s. The server bounds a shell's claimed impact by the same number. */
+export const MAX_PROJECTILE_SPEED = 3000;
+
 export type ModifierValue = {
 	isRelative?: boolean;
 	value: number;
@@ -48,7 +51,7 @@ const PLASMA_BALL = ReplicatedAssets.waitForAsset<BaseWeaponProjectile>("WeaponP
 const BULLET = ReplicatedAssets.waitForAsset<BaseWeaponProjectile>("WeaponProjectiles", "BulletProjectile");
 const LASER = ReplicatedAssets.waitForAsset<BaseWeaponProjectile>("WeaponProjectiles", "LaserProjectile");
 
-const projectileFolder = Workspace.FindFirstChild("Projectiles") ?? new Instance("Folder");
+export const projectileFolder = Workspace.FindFirstChild("Projectiles") ?? new Instance("Folder");
 projectileFolder.Name = "Projectiles";
 projectileFolder.Parent = Workspace;
 
@@ -162,7 +165,10 @@ export class WeaponProjectile extends InstanceComponent<BasePart> {
 		recalculateEffects(this);
 
 		// Modifier-scaled firing speed along the aim direction, plus the platform's own velocity (full inheritance).
-		const speedMag = applyModifiers(baseVelocity.Magnitude, this.allModifiers(), "speedModifier");
+		const speedMag = math.min(
+			applyModifiers(baseVelocity.Magnitude, this.allModifiers(), "speedModifier"),
+			MAX_PROJECTILE_SPEED,
+		);
 		const fired = baseVelocity.Magnitude > 0 ? baseVelocity.Unit.mul(speedMag) : Vector3.zero;
 		newModel.AssemblyLinearVelocity = fired.add(platformVelocity);
 	}

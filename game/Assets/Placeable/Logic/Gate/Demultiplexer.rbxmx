@@ -30,6 +30,8 @@
       <Ref name="PrimaryPart">1</Ref>
       <bool name="DefinesCapabilities">false</bool>
       <float name="ScaleFactor">1</float>
+      <BinaryString name="SerializedOverrides">
+      </BinaryString>
       <SharedString name="SlimHash">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
       <int64 name="SourceAssetId">-1</int64>
       <BinaryString name="Tags"></BinaryString>
@@ -47,6 +49,8 @@
           <B>0</B>
         </Color3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <int64 name="SourceAssetId">-1</int64>
         <BinaryString name="Tags"></BinaryString>
       </Properties>
@@ -55,9 +59,6 @@
           <string name="Name">0</string>
           <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
           <bool name="Anchored">true</bool>
-          <ContentId name="AssetId">
-            <url>https://www.roblox.com//asset/?id=104260581533264</url>
-          </ContentId>
           <BinaryString name="AttributesSerialize"></BinaryString>
           <bool name="AudioCanCollide">true</bool>
           <float name="BackParamA">-0.5</float>
@@ -94,6 +95,9 @@
           <int name="CollisionGroupId">2</int>
           <Color3uint8 name="Color3uint8">16777215</Color3uint8>
           <int name="ComponentIndex">-1</int>
+          <Content name="Content">
+            <uri>https://www.roblox.com//asset/?id=104260581533264</uri>
+          </Content>
           <PhysicalProperties name="CustomPhysicalProperties">
             <CustomPhysics>false</CustomPhysics>
           </PhysicalProperties>
@@ -152,6 +156,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <Vector3 name="size">
             <X>0.32385254</X>
             <Y>0.013671875</Y>
@@ -212,6 +218,8 @@
             <Ref name="Part0Internal">3</Ref>
             <Ref name="Part1Internal">5</Ref>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <int64 name="SourceAssetId">-1</int64>
             <int name="State">3</int>
             <BinaryString name="Tags"></BinaryString>
@@ -239,6 +247,8 @@
             <Ref name="Part0Internal">3</Ref>
             <Ref name="Part1Internal">7</Ref>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <int64 name="SourceAssetId">-1</int64>
             <int name="State">3</int>
             <BinaryString name="Tags"></BinaryString>
@@ -249,9 +259,6 @@
             <string name="Name">lamp</string>
             <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
             <bool name="Anchored">true</bool>
-            <ContentId name="AssetId">
-              <url>https://www.roblox.com//asset/?id=123834757397577</url>
-            </ContentId>
             <BinaryString name="AttributesSerialize"></BinaryString>
             <bool name="AudioCanCollide">true</bool>
             <float name="BackParamA">-0.5</float>
@@ -288,6 +295,9 @@
             <int name="CollisionGroupId">2</int>
             <Color3uint8 name="Color3uint8">3881787</Color3uint8>
             <int name="ComponentIndex">-1</int>
+            <Content name="Content">
+              <uri>https://www.roblox.com//asset/?id=123834757397577</uri>
+            </Content>
             <PhysicalProperties name="CustomPhysicalProperties">
               <CustomPhysics>false</CustomPhysics>
             </PhysicalProperties>
@@ -346,6 +356,8 @@
               <Z>0</Z>
             </Vector3>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <Vector3 name="size">
               <X>0.25375366</X>
               <Y>0.02734375</Y>
@@ -391,9 +403,6 @@
           <string name="Name">1</string>
           <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
           <bool name="Anchored">true</bool>
-          <ContentId name="AssetId">
-            <url>https://www.roblox.com//asset/?id=104260581533264</url>
-          </ContentId>
           <BinaryString name="AttributesSerialize"></BinaryString>
           <bool name="AudioCanCollide">true</bool>
           <float name="BackParamA">-0.5</float>
@@ -430,6 +439,9 @@
           <int name="CollisionGroupId">2</int>
           <Color3uint8 name="Color3uint8">16777215</Color3uint8>
           <int name="ComponentIndex">-1</int>
+          <Content name="Content">
+            <uri>https://www.roblox.com//asset/?id=104260581533264</uri>
+          </Content>
           <PhysicalProperties name="CustomPhysicalProperties">
             <CustomPhysics>false</CustomPhysics>
           </PhysicalProperties>
@@ -488,6 +500,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <Vector3 name="size">
             <X>0.32385254</X>
             <Y>0.013671875</Y>
@@ -548,6 +562,8 @@
             <Ref name="Part0Internal">8</Ref>
             <Ref name="Part1Internal">10</Ref>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <int64 name="SourceAssetId">-1</int64>
             <int name="State">3</int>
             <BinaryString name="Tags"></BinaryString>
@@ -575,6 +591,8 @@
             <Ref name="Part0Internal">8</Ref>
             <Ref name="Part1Internal">5</Ref>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <int64 name="SourceAssetId">-1</int64>
             <int name="State">3</int>
             <BinaryString name="Tags"></BinaryString>
@@ -585,9 +603,6 @@
             <string name="Name">lamp</string>
             <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
             <bool name="Anchored">true</bool>
-            <ContentId name="AssetId">
-              <url>https://www.roblox.com//asset/?id=123834757397577</url>
-            </ContentId>
             <BinaryString name="AttributesSerialize"></BinaryString>
             <bool name="AudioCanCollide">true</bool>
             <float name="BackParamA">-0.5</float>
@@ -624,6 +639,9 @@
             <int name="CollisionGroupId">2</int>
             <Color3uint8 name="Color3uint8">3881787</Color3uint8>
             <int name="ComponentIndex">-1</int>
+            <Content name="Content">
+              <uri>https://www.roblox.com//asset/?id=123834757397577</uri>
+            </Content>
             <PhysicalProperties name="CustomPhysicalProperties">
               <CustomPhysics>false</CustomPhysics>
             </PhysicalProperties>
@@ -682,6 +700,8 @@
               <Z>0</Z>
             </Vector3>
             <bool name="DefinesCapabilities">false</bool>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <Vector3 name="size">
               <X>0.25375366</X>
               <Y>0.02734375</Y>
@@ -734,6 +754,8 @@
           <B>0</B>
         </Color3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <int64 name="SourceAssetId">-1</int64>
         <BinaryString name="Tags"></BinaryString>
       </Properties>
@@ -816,6 +838,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -915,6 +939,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1014,6 +1040,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1113,6 +1141,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1145,6 +1175,8 @@
           <B>0</B>
         </Color3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <int64 name="SourceAssetId">-1</int64>
         <BinaryString name="Tags"></BinaryString>
       </Properties>
@@ -1227,6 +1259,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1326,6 +1360,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1425,6 +1461,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.4</X>
@@ -1524,6 +1562,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1623,6 +1663,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1722,6 +1764,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="shape">1</token>
           <Vector3 name="size">
             <X>0.2</X>
@@ -1748,9 +1792,6 @@
         <string name="Name">ColoredLine</string>
         <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
         <bool name="Anchored">true</bool>
-        <ContentId name="AssetId">
-          <url>https://www.roblox.com//asset/?id=17512760550</url>
-        </ContentId>
         <BinaryString name="AttributesSerialize"></BinaryString>
         <bool name="AudioCanCollide">true</bool>
         <float name="BackParamA">-0.5</float>
@@ -1787,6 +1828,9 @@
         <int name="CollisionGroupId">2</int>
         <Color3uint8 name="Color3uint8">16777215</Color3uint8>
         <int name="ComponentIndex">-1</int>
+        <Content name="Content">
+          <uri>https://www.roblox.com//asset/?id=17512760550</uri>
+        </Content>
         <PhysicalProperties name="CustomPhysicalProperties">
           <CustomPhysics>false</CustomPhysics>
         </PhysicalProperties>
@@ -1845,6 +1889,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <Vector3 name="size">
           <X>2.8999634</X>
           <Y>0.049804688</Y>
@@ -1905,6 +1951,8 @@
           <Ref name="Part0Internal">24</Ref>
           <Ref name="Part1Internal">26</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -1990,6 +2038,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <token name="shape">1</token>
         <Vector3 name="size">
           <X>2.9999695</X>
@@ -2031,6 +2081,8 @@
           <Ref name="Part0Internal">1</Ref>
           <Ref name="Part1Internal">5</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -2116,6 +2168,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <token name="shape">1</token>
         <Vector3 name="size">
           <X>3</X>
@@ -2157,6 +2211,8 @@
           <Ref name="Part0Internal">5</Ref>
           <Ref name="Part1Internal">24</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -2242,6 +2298,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <token name="shape">1</token>
         <Vector3 name="size">
           <X>2.7</X>
@@ -2283,6 +2341,8 @@
           <Ref name="Part0Internal">26</Ref>
           <Ref name="Part1Internal">5</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -2297,6 +2357,8 @@
           <Ref name="Part0">26</Ref>
           <Ref name="Part1">24</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
         </Properties>
@@ -2329,6 +2391,8 @@
           <token name="SelectionBehaviorRight">0</token>
           <token name="SelectionBehaviorUp">0</token>
           <bool name="SelectionGroup">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <token name="SizingMode">1</token>
           <int64 name="SourceAssetId">-1</int64>
           <BinaryString name="Tags"></BinaryString>
@@ -2405,6 +2469,8 @@
             <bool name="SelectionGroup">false</bool>
             <Ref name="SelectionImageObject">null</Ref>
             <int name="SelectionOrder">0</int>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <token name="Sink">0</token>
             <UDim2 name="Size">
               <XS>0</XS>
@@ -2499,6 +2565,8 @@
             <bool name="SelectionGroup">false</bool>
             <Ref name="SelectionImageObject">null</Ref>
             <int name="SelectionOrder">0</int>
+            <BinaryString name="SerializedOverrides">
+            </BinaryString>
             <token name="Sink">0</token>
             <UDim2 name="Size">
               <XS>2</XS>
@@ -2554,6 +2622,8 @@
                 <O>0</O>
               </UDim>
               <bool name="DefinesCapabilities">false</bool>
+              <BinaryString name="SerializedOverrides">
+              </BinaryString>
               <int64 name="SourceAssetId">-1</int64>
               <BinaryString name="Tags"></BinaryString>
             </Properties>
@@ -2566,9 +2636,6 @@
         <string name="Name">DefaultLamp</string>
         <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
         <bool name="Anchored">true</bool>
-        <ContentId name="AssetId">
-          <url>https://www.roblox.com//asset/?id=104260581533264</url>
-        </ContentId>
         <BinaryString name="AttributesSerialize"></BinaryString>
         <bool name="AudioCanCollide">true</bool>
         <float name="BackParamA">-0.5</float>
@@ -2605,6 +2672,9 @@
         <int name="CollisionGroupId">2</int>
         <Color3uint8 name="Color3uint8">16777215</Color3uint8>
         <int name="ComponentIndex">-1</int>
+        <Content name="Content">
+          <uri>https://www.roblox.com//asset/?id=104260581533264</uri>
+        </Content>
         <PhysicalProperties name="CustomPhysicalProperties">
           <CustomPhysics>false</CustomPhysics>
         </PhysicalProperties>
@@ -2663,6 +2733,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <Vector3 name="size">
           <X>0.32385254</X>
           <Y>0.013671875</Y>
@@ -2706,9 +2778,6 @@
           <string name="Name">OutputLamp</string>
           <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
           <bool name="Anchored">true</bool>
-          <ContentId name="AssetId">
-            <url>https://www.roblox.com//asset/?id=123834757397577</url>
-          </ContentId>
           <BinaryString name="AttributesSerialize"></BinaryString>
           <bool name="AudioCanCollide">true</bool>
           <float name="BackParamA">-0.5</float>
@@ -2745,6 +2814,9 @@
           <int name="CollisionGroupId">2</int>
           <Color3uint8 name="Color3uint8">65280</Color3uint8>
           <int name="ComponentIndex">-1</int>
+          <Content name="Content">
+            <uri>https://www.roblox.com//asset/?id=123834757397577</uri>
+          </Content>
           <PhysicalProperties name="CustomPhysicalProperties">
             <CustomPhysics>false</CustomPhysics>
           </PhysicalProperties>
@@ -2803,6 +2875,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <Vector3 name="size">
             <X>0.25375366</X>
             <Y>0.02734375</Y>
@@ -2864,6 +2938,8 @@
           <Ref name="Part0Internal">35</Ref>
           <Ref name="Part1Internal">36</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -2891,6 +2967,8 @@
           <Ref name="Part0Internal">35</Ref>
           <Ref name="Part1Internal">5</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -2902,9 +2980,6 @@
         <string name="Name">InputLamp</string>
         <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
         <bool name="Anchored">true</bool>
-        <ContentId name="AssetId">
-          <url>https://www.roblox.com//asset/?id=104260581533264</url>
-        </ContentId>
         <BinaryString name="AttributesSerialize"></BinaryString>
         <bool name="AudioCanCollide">true</bool>
         <float name="BackParamA">-0.5</float>
@@ -2941,6 +3016,9 @@
         <int name="CollisionGroupId">2</int>
         <Color3uint8 name="Color3uint8">16777215</Color3uint8>
         <int name="ComponentIndex">-1</int>
+        <Content name="Content">
+          <uri>https://www.roblox.com//asset/?id=104260581533264</uri>
+        </Content>
         <PhysicalProperties name="CustomPhysicalProperties">
           <CustomPhysics>false</CustomPhysics>
         </PhysicalProperties>
@@ -2999,6 +3077,8 @@
           <Z>0</Z>
         </Vector3>
         <bool name="DefinesCapabilities">false</bool>
+        <BinaryString name="SerializedOverrides">
+        </BinaryString>
         <Vector3 name="size">
           <X>0.32385254</X>
           <Y>0.013671875</Y>
@@ -3059,6 +3139,8 @@
           <Ref name="Part0Internal">39</Ref>
           <Ref name="Part1Internal">41</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -3086,6 +3168,8 @@
           <Ref name="Part0Internal">39</Ref>
           <Ref name="Part1Internal">5</Ref>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <int64 name="SourceAssetId">-1</int64>
           <int name="State">3</int>
           <BinaryString name="Tags"></BinaryString>
@@ -3096,9 +3180,6 @@
           <string name="Name">OutputLamp</string>
           <SharedString name="AeroMeshData">rxNJufX5oaagQE3qNtzJSQ==</SharedString>
           <bool name="Anchored">true</bool>
-          <ContentId name="AssetId">
-            <url>https://www.roblox.com//asset/?id=123834757397577</url>
-          </ContentId>
           <BinaryString name="AttributesSerialize"></BinaryString>
           <bool name="AudioCanCollide">true</bool>
           <float name="BackParamA">-0.5</float>
@@ -3135,6 +3216,9 @@
           <int name="CollisionGroupId">2</int>
           <Color3uint8 name="Color3uint8">65280</Color3uint8>
           <int name="ComponentIndex">-1</int>
+          <Content name="Content">
+            <uri>https://www.roblox.com//asset/?id=123834757397577</uri>
+          </Content>
           <PhysicalProperties name="CustomPhysicalProperties">
             <CustomPhysics>false</CustomPhysics>
           </PhysicalProperties>
@@ -3193,6 +3277,8 @@
             <Z>0</Z>
           </Vector3>
           <bool name="DefinesCapabilities">false</bool>
+          <BinaryString name="SerializedOverrides">
+          </BinaryString>
           <Vector3 name="size">
             <X>0.25375366</X>
             <Y>0.02734375</Y>

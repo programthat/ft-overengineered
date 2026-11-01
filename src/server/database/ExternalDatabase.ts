@@ -1,7 +1,7 @@
 import { ConfigService, HttpService, Players, RunService, ServerScriptService } from "@rbxts/services";
 import { JSON } from "engine/shared/fixes/Json";
 import { BlocksSerializer } from "shared/building/BlocksSerializer";
-import type { PlayerDatabaseData } from "server/database/PlayerDatabase";
+import type { PlayerBlockLimits, PlayerDatabaseData } from "server/database/PlayerDatabase";
 import type { LatestSerializedBlocks } from "shared/building/BlocksSerializer";
 
 type ErrType = "HTTP" | "OUT_OF_INDEX" | "NOT_FOUND" | "INCORRECT_TOKEN";
@@ -127,8 +127,15 @@ let studioConfig: StudioConfig | undefined;
 export const getStudioConfig = (): StudioConfig => {
 	if (studioConfig !== undefined) return studioConfig;
 
-	const module = ServerScriptService.FindFirstChild("studioconfig") as ModuleScript | undefined;
-	if (module && !module.IsA("Folder")) $warn("studioconfig is not a folder");
+	const module = ServerScriptService.FindFirstChild("studioconfig");
+	// ignore if it is not a module: a place assembled without Rojo carries an empty Folder of this name
+	if (module && !module.IsA("ModuleScript")) {
+		$warn(
+			`studioconfig is a ${module.ClassName}, not a ModuleScript, so this session is read-only against production`,
+		);
+		return (studioConfig = {});
+	}
+
 	return (studioConfig = module ? (require(module) as StudioConfig) : {});
 };
 
@@ -292,6 +299,70 @@ export namespace ExternalDatabase {
 			if ("error" in body) return { ok: false, error: body.error };
 
 			return { ok: true };
+		} catch (err) {
+			markDown(tostring(err));
+			return { ok: false, error: tostring(err) };
+		}
+	};
+
+	/** Row keys the backend changed and this game has not pushed back yet; empty when there are none. */
+	export const GetPendingChanges = (UID: number): ExternalRead<Partial<PlayerDatabaseData>> => {
+		if (isDown()) return { ok: false, error: downError() };
+
+		try {
+			const response = request({
+				Method: "GET",
+				Url: `${getBaseUrl()}/player/${UID}/pending`,
+			});
+
+			if (response.StatusCode !== 200) {
+				return { ok: false, error: reportStatus(response.StatusCode, "The pending changes", response.Body) };
+			}
+
+			markUp();
+			return { ok: true, value: JSON.deserialize<Partial<PlayerDatabaseData>>(response.Body) };
+		} catch (err) {
+			markDown(tostring(err));
+			return { ok: false, error: tostring(err) };
+		}
+	};
+
+	/** Set one per-player block limit upstream, where it stays pending until a mirror carries it; undefined removes it. */
+	export const SetBlockLimit = (
+		UID: number,
+		blockId: string,
+		limit: number | undefined,
+	): ExternalRead<PlayerBlockLimits> => {
+		if (isDown()) return { ok: false, error: downError() };
+
+		const token = getToken();
+		if (!token) return { ok: false, error: "No write token was found" };
+
+		try {
+			const response = request({
+				Method: "POST",
+				Headers: {
+					"Content-Type": "application/json",
+				},
+				Url: `${getBaseUrl()}/player/blocks`,
+				Body: JSON.serialize({
+					playerID: tostring(UID),
+					blockId,
+					limit,
+					token,
+				}),
+			});
+
+			if (response.StatusCode !== 200) {
+				return { ok: false, error: reportStatus(response.StatusCode, "The block limit", response.Body) };
+			}
+
+			markUp();
+
+			const body = JSON.deserialize<ExternalError | { blocks: PlayerBlockLimits }>(response.Body);
+			if ("error" in body) return { ok: false, error: body.error };
+
+			return { ok: true, value: body.blocks };
 		} catch (err) {
 			markDown(tostring(err));
 			return { ok: false, error: tostring(err) };

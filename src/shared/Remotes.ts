@@ -181,7 +181,6 @@ declare global {
 export interface PlayerInitResponse {
 	readonly remotes: Instance;
 	readonly data: {
-		readonly purchasedSlots: number | undefined;
 		readonly settings: Partial<PlayerConfig> | undefined;
 		readonly slots: readonly SlotMeta[] | undefined;
 		readonly data: OePlayerData | undefined;
@@ -244,6 +243,7 @@ export const CustomRemotes = {
 			},
 			Response
 		>("adm_ban_player"),
+		adminUnbanPlayer: new C2S2CRemoteFunction<{ plrID: number }, Response>("adm_unban_player"),
 		adminAnnounce: new C2S2CRemoteFunction<{ payload: AnnouncementPayload; all: boolean }, Response>(
 			"adm_announce",
 		),

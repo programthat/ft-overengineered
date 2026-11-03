@@ -1,7 +1,7 @@
 import { Sha256 } from "@rbxts/crypto";
 import { ConfigService, HttpService, RunService, Workspace } from "@rbxts/services";
 import { JSON } from "engine/shared/fixes/Json";
-import { getStudioConfig } from "server/database/ExternalDatabase";
+import { studioConfig } from "server/database/ExternalDatabase";
 import { BlocksSerializer, Filter } from "shared/building/BlocksSerializer";
 import Base85 from "shared/utils/Base85";
 import Cryptography from "shared/utils/rbx-cryptography";
@@ -95,7 +95,7 @@ const getGamePrivateKey = (): string | undefined => {
 
 	// IsStudio, not PlaceId === 0: Studio on a PUBLISHED place has a real PlaceId and no ConfigService TOKEN.
 	if (RunService.IsStudio()) {
-		exportPriToken = getStudioConfig().privateexportkey;
+		exportPriToken = studioConfig.get().privateexportkey;
 	} else {
 		try {
 			exportPriToken = ConfigService.GetConfigAsync().GetValue("EXPORTTOKEN") as string | undefined;
@@ -112,7 +112,7 @@ let exportPubTokenResolved = false;
 const getGamePublicKey = (): string | undefined => {
 	if (exportPubTokenResolved) return exportPubToken;
 
-	const privateKey = getStudioConfig().privateexportkey;
+	const privateKey = studioConfig.get().privateexportkey;
 	if (!privateKey) return undefined;
 
 	// Public key derived from private key

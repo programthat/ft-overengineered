@@ -16,7 +16,6 @@ import { Objects } from "engine/shared/fixes/Objects";
 import { Localization } from "engine/shared/Localization";
 import { PlayerRank } from "engine/shared/PlayerRank";
 import { BlockLimits } from "shared/blocks/BlockLimits";
-import { GameDefinitions } from "shared/data/GameDefinitions";
 import type { PopupController } from "client/gui/PopupController";
 import type { PlayerDataStorage } from "client/PlayerDataStorage";
 import type { Theme } from "client/Theme";
@@ -264,6 +263,9 @@ export class BlockSelectionControl extends Control<BlockSelectionControlDefiniti
 		);
 
 		this.event.subscribeObservable(this.highlightedBlocks, () => this.create(this.selectedCategory.get(), false));
+		this.event
+			.addObservable(playerData.data.fReadonlyCreateBased((d) => d.blocks))
+			.subscribe(() => this.create(this.selectedCategory.get(), false));
 
 		this.event.subscribe(this.gui.Content.SearchTextBox.Focused, () => {
 			if (!playerData.config.get().interface.searchBehaviour.resetOnSearch) return;
@@ -435,8 +437,11 @@ export class BlockSelectionControl extends Control<BlockSelectionControlDefiniti
 		const processBlock = (block: Block) => {
 			if (!this.isVisible(block)) return;
 
+			const unavailable = !PlayerRank.isDev(Players.LocalPlayer) && limitOf(block) <= 0;
+			if (unavailable && block.secret) return;
+
 			let button: BlockControl;
-			if (GameDefinitions.isOfficialAwms && !PlayerRank.isDev(Players.LocalPlayer) && limitOf(block) <= 0) {
+			if (unavailable && block.featured) {
 				// 13+ check
 				if (
 					!(this.adsAllowed ??= PolicyService.GetPolicyInfoForPlayerAsync(Players.LocalPlayer).AreAdsAllowed)
